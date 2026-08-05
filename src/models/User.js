@@ -1,43 +1,34 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-      trim: true,
+const userSchema = new mongoose.Schema({
+    username:{
+        type:String,
+        required:true,
+        unique:true
     },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      lowercase: true,
-      trim: true,
+    email:{
+        type:String,
+        required:true,
+        unique:true
     },
-    password: {
-      type: String,
-      required: true,
-      minlength: 6,
+    password:{
+        type:String,
+        required:true
     },
-    bio: {
-      type: String,
-      default: "Available for collaboration",
-      trim: true,
+    profilePicture:{
+        type:String,
+        default:""
     },
-    avatar: {
-      type: String,
-      default: "",
+    bio:{
+        type:String,
+        default:""
     },
-  },
-  {
-    timestamps: true,
-    toJSON: {
-      transform: (_, ret) => {
-        delete ret.password;
-        return ret;
-      },
+    isOnline:{
+        type:Boolean,
+        default:false
     },
-  }
-);
-
-export const User = mongoose.model("User", userSchema);
+    lastSeen:{
+        type:Date,
+        default:Date.now
+    }
+})
