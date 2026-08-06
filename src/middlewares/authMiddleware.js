@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-
+import User from '../models/User.js'
 
 const protectRoute = async(req,res,next)=>{
     try{
@@ -20,5 +20,27 @@ const protectRoute = async(req,res,next)=>{
                 message: "Unauthorized - Invalid token",
             });
         }
+
+        const user = await User.findById(decoded,userId).select("-password");
+
+        if(!user){
+            return res.status(401).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        req.user=user;
+
+        next();
+    }
+    catch(error){
+        console.error("Auth Middleware  Error:", error.message);
+
+
+        return res.status(401).json({
+            success:false,
+            message:"Unauthorize",
+        })
     }
 }
