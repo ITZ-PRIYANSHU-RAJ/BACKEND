@@ -4,9 +4,8 @@ import User from "../models/User.js";
 
 export const registerUser = async (req, res) => {
   try {
-    const { fullname, email, password } = req.body;
-
-    if (!fullname || !email || !password) {
+       const { fullName, username, email, password } = req.body;
+    if (!fullName || !username || !email || !password) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
@@ -33,7 +32,8 @@ export const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const profile = await User.create({
-      fullname,
+      fullName,
+      username,
       email,
       password: hashedPassword,
     });
@@ -45,7 +45,7 @@ export const registerUser = async (req, res) => {
       message: "User registered successfully",
       user: {
         _id: profile._id,
-        fullname: profile.fullname,
+        fullName: profile.fullName,
         email: profile.email,
       },
     });
@@ -98,7 +98,7 @@ export const loginUser = async(req,res) =>{
             message:"Login successful",
             user:{
                 _id:user._id,
-                fullname:user.fullname,
+                fullName:user.fullName,
                 email:user.email,
             }
         });
