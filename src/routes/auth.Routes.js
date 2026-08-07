@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { protectRoute } from '../middlewares/authMiddleware.js';
+import  protectRoute from '../middlewares/authMiddleware.js';
 import { getCurrentUser, loginUser, logoutUser, registerUser } from '../controllers/authController.js';
 
 

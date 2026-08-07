@@ -31,22 +31,22 @@ export const registerUser = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const profile = await User.create({
+    const user= await User.create({
       fullName,
       username,
       email,
       password: hashedPassword,
     });
 
-    generateToken(profile._id, res);
+    generateToken(user._id, res);
 
     res.status(201).json({
       success: true,
       message: "User registered successfully",
       user: {
-        _id: profile._id,
-        fullName: profile.fullName,
-        email: profile.email,
+        _id: user._id,
+        fullName: user.fullName,
+        email: user.email,
       },
     });
   } catch (error) {
@@ -80,7 +80,7 @@ export const loginUser = async(req,res) =>{
             });
         }
 
-        const isPasswordCorrect = await bcrypt.comapre(
+        const isPasswordCorrect = await bcrypt.compare(
             password,
             user.password
         );
@@ -91,7 +91,7 @@ export const loginUser = async(req,res) =>{
             });
         }
 
-        generateToken(profile._id,res);
+        generateToken(user._id,res);
 
         res.status(200).json({
             success:true,
