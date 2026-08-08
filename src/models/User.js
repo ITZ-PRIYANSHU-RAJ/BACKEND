@@ -34,6 +34,18 @@ const userSchema = new mongoose.Schema({
     lastSeen:{
         type:Date,
         default:Date.now
+    },
+    bio:{
+        type:String,
+        default:""
+    },
+    status:{
+        type:String,
+        default:"Hey there! I am using ChatApp"
+    },
+    lastSeen:{
+        type:Date,
+        default:Date.now 
     }
 })
 
