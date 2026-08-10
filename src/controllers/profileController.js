@@ -26,7 +26,26 @@ export const updateProfile = async(req,res)=>{
             user.profilePic = profilePic;
 
             await user.save();
-        }
 
-    }
+            const updateUser = {
+                _id: user._id,
+                fullName: user.fullName,
+                username: user.username,
+                bio: user.bio,
+                profilePic: user.profilePic,
+            };
+            res.status(200).json({
+             success:true,
+             message:"Profile updated successfully",
+             user:updateUser,
+            });
+        }
+    }catch(error){
+            console.error("Update Profile Error:",error.message);
+
+            res.status(500).json({
+                success:false,
+                message:"Internal Server Error",
+            });
+        }
 }
