@@ -2,6 +2,7 @@ import User from "../models/User.js";
 
 export const searchUsers = async (req,res) =>{
     try {
+        
         const {query} =req.query;
 
         if(!query || query.trim() === ""){
