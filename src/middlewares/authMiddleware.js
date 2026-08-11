@@ -21,7 +21,7 @@ const protectRoute = async (req, res, next) => {
     }
 
     // decoded contains the payload
-    req.userId = decoded.userId;
+    req.user =user;
 
     next();
   } catch (error) {
