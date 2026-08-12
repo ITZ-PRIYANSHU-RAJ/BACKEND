@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.Routes.js";
 import profileRoutes from "./routes/auth.profile.js";
 import userRoutes from "./routes/userRoutes.js";
-import messageRoutes from "./routes/messageRoutes.js"
+import messageRoutes from "./routes/messageRoutes.js";
 
 const app = express();
 
@@ -14,6 +14,6 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/users", userRoutes);
-app.use("api/messages",messageRoutes);
+app.use("/api/messages", messageRoutes);
 
 export default app;
