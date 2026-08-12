@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import http from "http";
 import { Server } from "socket.io";
+import { initializeSocket } from "./lib/socket.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -18,6 +19,8 @@ const io = new Server(server, {
         credentials: true,
     },
 });
+
+initializeSocket(io);
 
 io.on("connection", (socket) => {
     console.log("User connected:", socket.id);
