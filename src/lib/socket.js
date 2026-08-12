@@ -22,4 +22,8 @@ export const initializeSocket = (io) =>{
             console.log("User disconnected:",socket.id)
         })
     })
-}
+};
+
+export const getReceiverSocketId = (userId)=>{
+    return onlineUsers.get(userId.toString());
+};
