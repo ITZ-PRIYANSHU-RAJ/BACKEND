@@ -6,18 +6,70 @@ export const initializeSocket = (io) => {
   io.on("connection", (socket) => {
     console.log("User connected:", socket.id);
 
-    socket.on("user-online", (userId) => {
-      onlineUsers.set(userId.toString(), socket.id);
+    // =========================
+// TYPING START
+// =========================
 
-      console.log("User online:", userId);
-      console.log("Online users:", onlineUsers);
+socket.on("typing-start", ({ senderId, receiverId }) => {
+  const receiverSocketId = onlineUsers.get(
+    receiverId.toString()
+  );
+
+  if (receiverSocketId) {
+    io.to(receiverSocketId).emit("user-typing", {
+      userId: senderId,
     });
+  }
+});
+
+// =========================
+// TYPING STOP
+// =========================
+
+socket.on("typing-stop", ({ senderId, receiverId }) => {
+  const receiverSocketId = onlineUsers.get(
+    receiverId.toString()
+  );
+
+  if (receiverSocketId) {
+    io.to(receiverSocketId).emit("user-stopped-typing", {
+      userId: senderId,
+    });
+  }
+});
+
+    // =========================
+    // USER ONLINE
+    // =========================
+
+    socket.on("user-online", (userId) => {
+      const id = userId.toString();
+
+      onlineUsers.set(id, socket.id);
+
+      console.log("User online:", id);
+      console.log("Online users:", onlineUsers);
+
+      // Tell all connected clients
+      io.emit("user-status", {
+        userId: id,
+        online: true,
+      });
+    });
+
+    // =========================
+    // SEND MESSAGE
+    // =========================
 
     socket.on("send-message", async (data) => {
       try {
-        const { senderId, receiverId, text, image } = data;
+        const {
+          senderId,
+          receiverId,
+          text,
+          image,
+        } = data;
 
-        // Validate data
         if (!senderId || !receiverId) {
           return;
         }
@@ -33,35 +85,61 @@ export const initializeSocket = (io) => {
           image: image || "",
         });
 
-        // Find receiver's socket
         const receiverSocketId = onlineUsers.get(
           receiverId.toString()
         );
 
+        // Send to receiver
         if (receiverSocketId) {
-          io.to(receiverSocketId).emit("new-message", message);
+          io.to(receiverSocketId).emit(
+            "new-message",
+            message
+          );
         }
 
-        // Send message back to sender
+        // Send back to sender
         socket.emit("new-message", message);
 
       } catch (error) {
-        console.error("Socket Send Message Error:", error.message);
+        console.error(
+          "Socket Send Message Error:",
+          error.message
+        );
       }
     });
 
+    // =========================
+    // USER DISCONNECT
+    // =========================
 
     socket.on("disconnect", () => {
+      let disconnectedUserId = null;
+
       for (const [userId, socketId] of onlineUsers.entries()) {
         if (socketId === socket.id) {
+          disconnectedUserId = userId;
           onlineUsers.delete(userId);
-
-          console.log("User offline:", userId);
           break;
         }
       }
 
-      console.log("User disconnected:", socket.id);
+      if (disconnectedUserId) {
+        console.log(
+          "User offline:",
+          disconnectedUserId
+        );
+
+        // Tell all clients
+        io.emit("user-status", {
+          userId: disconnectedUserId,
+          online: false,
+        });
+      }
+
+      console.log(
+        "User disconnected:",
+        socket.id
+      );
     });
   });
 };
