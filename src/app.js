@@ -5,9 +5,10 @@ import authRoutes from "./routes/auth.Routes.js";
 import profileRoutes from "./routes/auth.profile.js";
 import userRoutes from "./routes/userRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
-
+import cors from "cors";
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
