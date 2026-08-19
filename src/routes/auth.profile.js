@@ -3,8 +3,7 @@ import{
     updateProfile,
     getProfile,
 } from "../controllers/profileController.js";
-import protectRoute from "../middlewares/authMiddleware.js";
-
+import { protectRoute } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 router.put("/update",protectRoute,updateProfile);

@@ -1,11 +1,12 @@
 import express from "express";
-import protectRoute from "../middlewares/authMiddleware.js";
+import { protectRoute } from "../middlewares/authMiddleware.js";
 
 import {
-  getMe,
+  registerUser,
   loginUser,
   logoutUser,
-  registerUser,
+  getCurrentUser,
+  getMe,
 } from "../controllers/authController.js";
 
 const router = express.Router();
@@ -13,7 +14,11 @@ const router = express.Router();
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 
-router.post("/logout", protectRoute, logoutUser);
-router.get("/me", getMe);
+// Protected routes
+router.get("/me", protectRoute, getMe);
+router.get("/current-user", protectRoute, getCurrentUser);
+
+// Logout
+router.post("/logout", logoutUser);
 
 export default router;

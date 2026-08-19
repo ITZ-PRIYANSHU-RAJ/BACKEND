@@ -65,18 +65,19 @@ export const registerUser = async (req, res) => {
     });
 
     // Generate JWT cookie
-    generateToken(user._id, res);
+    const token = generateToken(user._id);
 
-    return res.status(201).json({
-      success: true,
-      message: "User registered successfully",
-      user: {
-        _id: user._id,
-        fullName: user.fullName,
-        username: user.username,
-        email: user.email,
-      },
-    });
+return res.status(201).json({
+  success: true,
+  message: "User registered successfully",
+  token,
+  user: {
+    _id: user._id,
+    fullName: user.fullName,
+    username: user.username,
+    email: user.email,
+  },
+});
   } catch (error) {
     console.error("Register error:", error.message);
 
@@ -127,18 +128,19 @@ export const loginUser = async (req, res) => {
     }
 
     // Generate JWT cookie
-    generateToken(user._id, res);
+    const token = generateToken(user._id);
 
-    return res.status(200).json({
-      success: true,
-      message: "Login successful",
-      user: {
-        _id: user._id,
-        fullName: user.fullName,
-        username: user.username,
-        email: user.email,
-      },
-    });
+return res.status(200).json({
+  success: true,
+  message: "Login successful",
+  token,
+  user: {
+    _id: user._id,
+    fullName: user.fullName,
+    username: user.username,
+    email: user.email,
+  },
+});
   } catch (error) {
     console.error("Login Error:", error.message);
 
